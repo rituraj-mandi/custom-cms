@@ -6,6 +6,8 @@ import mermaid from "mermaid";
 
 import katex from "katex";
 
+import DOMPurify from "dompurify";
+
 import { useEffect } from "react";
 
 export default function RenderBlocks({
@@ -34,7 +36,9 @@ export default function RenderBlocks({
                   key={index}
                   dangerouslySetInnerHTML={{
                     __html:
-                      block.data.text,
+                      DOMPurify.sanitize(
+                        block.data.text
+                      ),
                   }}
                   className="text-lg leading-8 text-zinc-200"
                 />
@@ -52,7 +56,9 @@ export default function RenderBlocks({
                   key={index}
                   dangerouslySetInnerHTML={{
                     __html:
-                      block.data.text,
+                      DOMPurify.sanitize(
+                        block.data.text
+                      ),
                   }}
                   className={`font-bold leading-tight ${
                     level === 1
@@ -137,7 +143,9 @@ export default function RenderBlocks({
                           key={i}
                           dangerouslySetInnerHTML={{
                             __html:
-                              item,
+                              DOMPurify.sanitize(
+                                item
+                              ),
                           }}
                         />
                       )
@@ -160,7 +168,9 @@ export default function RenderBlocks({
                         key={i}
                         dangerouslySetInnerHTML={{
                           __html:
-                            item,
+                            DOMPurify.sanitize(
+                              item
+                            ),
                         }}
                       />
                     )
@@ -177,7 +187,9 @@ export default function RenderBlocks({
                   <div
                     dangerouslySetInnerHTML={{
                       __html:
-                        block.data.text,
+                        DOMPurify.sanitize(
+                          block.data.text
+                        ),
                     }}
                   />
 
@@ -238,7 +250,9 @@ export default function RenderBlocks({
                                   className="border-r border-zinc-800 px-4 py-3 text-zinc-200"
                                   dangerouslySetInnerHTML={{
                                     __html:
-                                      cell,
+                                      DOMPurify.sanitize(
+                                        cell
+                                      ),
                                   }}
                                 />
                               )
@@ -310,7 +324,9 @@ export default function RenderBlocks({
                         <div
                           dangerouslySetInnerHTML={{
                             __html:
-                              item.text,
+                              DOMPurify.sanitize(
+                                item.text
+                              ),
                           }}
                           className="text-zinc-200"
                         />
@@ -375,32 +391,34 @@ export default function RenderBlocks({
                   key={index}
                   dangerouslySetInnerHTML={{
                     __html:
-                      block.data.html,
+                      DOMPurify.sanitize(
+                        block.data.html
+                      ),
                   }}
                 />
               );
 
             case "carousel":
-  return (
-    <div
-      key={index}
-      className="flex snap-x gap-4 overflow-x-auto pb-4"
-    >
-      {(block.data || []).map(
-        (
-          image: any,
-          i: number
-        ) => (
-          <img
-            key={i}
-            src={image.url}
-            alt=""
-            className="h-[250px] min-w-[49%] snap-center rounded-3xl bg-zinc-900 object-contain"
-          />
-        )
-      )}
-    </div>
-  );
+              return (
+                <div
+                  key={index}
+                  className="flex snap-x gap-4 overflow-x-auto pb-4"
+                >
+                  {(block.data || []).map(
+                    (
+                      image: any,
+                      i: number
+                    ) => (
+                      <img
+                        key={i}
+                        src={image.url}
+                        alt=""
+                        className="h-[250px] min-w-[49%] snap-center rounded-3xl bg-zinc-900 object-contain"
+                      />
+                    )
+                  )}
+                </div>
+              );
 
             case "flipbox":
               return (

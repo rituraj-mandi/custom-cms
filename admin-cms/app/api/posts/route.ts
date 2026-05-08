@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase"
+import { requireUser } from "@/lib/auth"
 
 export async function GET() {
   try {
@@ -9,7 +10,7 @@ export async function GET() {
       .select("*")
       .order("created_at", {
         ascending: false,
-      });
+      })
 
     if (error) {
       return NextResponse.json(
@@ -19,10 +20,10 @@ export async function GET() {
         {
           status: 500,
         }
-      );
+      )
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data)
   } catch (error) {
     return NextResponse.json(
       {
@@ -31,13 +32,15 @@ export async function GET() {
       {
         status: 500,
       }
-    );
+    )
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    await requireUser()
+
+    const body = await req.json()
 
     const {
       title,
@@ -45,7 +48,7 @@ export async function POST(req: Request) {
       category,
       subcategory,
       content,
-    } = body;
+    } = body
 
     if (!title || !slug || !content) {
       return NextResponse.json(
@@ -55,7 +58,7 @@ export async function POST(req: Request) {
         {
           status: 400,
         }
-      );
+      )
     }
 
     const { data, error } = await supabase
@@ -70,7 +73,7 @@ export async function POST(req: Request) {
         },
       ])
       .select()
-      .single();
+      .single()
 
     if (error) {
       return NextResponse.json(
@@ -80,25 +83,27 @@ export async function POST(req: Request) {
         {
           status: 500,
         }
-      );
+      )
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data)
   } catch (error) {
     return NextResponse.json(
       {
-        error: "Failed to create post",
+        error: "Unauthorized",
       },
       {
-        status: 500,
+        status: 401,
       }
-    );
+    )
   }
 }
 
 export async function PUT(req: Request) {
   try {
-    const body = await req.json();
+    await requireUser()
+
+    const body = await req.json()
 
     const {
       id,
@@ -107,7 +112,7 @@ export async function PUT(req: Request) {
       category,
       subcategory,
       content,
-    } = body;
+    } = body
 
     if (!id) {
       return NextResponse.json(
@@ -117,7 +122,7 @@ export async function PUT(req: Request) {
         {
           status: 400,
         }
-      );
+      )
     }
 
     const { data, error } = await supabase
@@ -131,7 +136,7 @@ export async function PUT(req: Request) {
       })
       .eq("id", id)
       .select()
-      .single();
+      .single()
 
     if (error) {
       return NextResponse.json(
@@ -141,27 +146,29 @@ export async function PUT(req: Request) {
         {
           status: 500,
         }
-      );
+      )
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data)
   } catch (error) {
     return NextResponse.json(
       {
-        error: "Failed to update post",
+        error: "Unauthorized",
       },
       {
-        status: 500,
+        status: 401,
       }
-    );
+    )
   }
 }
 
 export async function DELETE(req: Request) {
   try {
-    const body = await req.json();
+    await requireUser()
 
-    const { id } = body;
+    const body = await req.json()
+
+    const { id } = body
 
     if (!id) {
       return NextResponse.json(
@@ -171,13 +178,13 @@ export async function DELETE(req: Request) {
         {
           status: 400,
         }
-      );
+      )
     }
 
     const { error } = await supabase
       .from("posts")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
 
     if (error) {
       return NextResponse.json(
@@ -187,20 +194,20 @@ export async function DELETE(req: Request) {
         {
           status: 500,
         }
-      );
+      )
     }
 
     return NextResponse.json({
       success: true,
-    });
+    })
   } catch (error) {
     return NextResponse.json(
       {
-        error: "Failed to delete post",
+        error: "Unauthorized",
       },
       {
-        status: 500,
+        status: 401,
       }
-    );
+    )
   }
 }

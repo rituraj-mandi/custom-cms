@@ -1,44 +1,13 @@
 "use client";
 
+import Editor from "@/components/Editor";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import slugify from "slugify";
 
-import VideoTool from "@/components/VideoTool";
-import AudioTool from "@/components/AudioTool";
+import { categories } from "@/lib/constants"
 
-const categories = {
-  "Option 1": [
-    "Sub-option 1",
-    "Sub-option 2",
-    "Sub-option 3",
-  ],
-
-  "Option 2": [
-    "Sub-option 1",
-    "Sub-option 2",
-    "Sub-option 3",
-  ],
-
-  "Option 3": [
-    "Sub-option 1",
-    "Sub-option 2",
-    "Sub-option 3",
-  ],
-
-  "Option 4": [
-    "Sub-option 1",
-    "Sub-option 2",
-    "Sub-option 3",
-  ],
-
-  "Option 5": [
-    "Sub-option 1",
-    "Sub-option 2",
-    "Sub-option 3",
-  ],
-};
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -68,8 +37,6 @@ export default function NewPostPage() {
 
   useEffect(() => {
     checkUser();
-
-    initEditor();
 
     return () => {
       editorRef.current?.destroy();
@@ -125,304 +92,6 @@ export default function NewPostPage() {
 
     if (!user) {
       router.push("/");
-    }
-  };
-
-  const initEditor = async () => {
-    const holder =
-      document.getElementById(
-        "editorjs"
-      );
-
-    if (!holder) return;
-
-    const EditorJS = (
-      await import("@editorjs/editorjs")
-    ).default;
-
-    const Header = (
-      await import("@editorjs/header")
-    ).default;
-
-    const List = (
-      await import("@editorjs/list")
-    ).default;
-
-    const Paragraph = (
-      await import("@editorjs/paragraph")
-    ).default;
-
-    const ImageTool = (
-      await import("@editorjs/image")
-    ).default;
-
-    const Embed = (
-      await import("@editorjs/embed")
-    ).default;
-
-    const CodeTool = (
-      await import("@editorjs/code")
-    ).default;
-
-    const Table = (
-      await import("@editorjs/table")
-    ).default;
-
-    const Quote = (
-      await import("@editorjs/quote")
-    ).default;
-
-    const Delimiter = (
-      await import("@editorjs/delimiter")
-    ).default;
-
-    const Checklist = (
-      await import("@editorjs/checklist")
-    ).default;
-
-    const Warning = (
-      await import("@editorjs/warning")
-    ).default;
-
-    const Raw = (
-      await import("@editorjs/raw")
-    ).default;
-
-    const Marker = (
-      await import("@editorjs/marker")
-    ).default;
-
-    const Carousel = (
-      await import(
-        "editorjs-carousel"
-      )
-    ).default;
-
-    const MermaidTool = (
-      await import(
-        "editorjs-mermaid"
-      )
-    ).default;
-
-    if (!editorRef.current) {
-      const editor = new EditorJS({
-        holder: holder,
-
-        placeholder:
-          "Write your blog post here...",
-
-        async onChange() {
-          setHasUnsavedChanges(true);
-        },
-
-        tools: {
-          header: Header,
-
-          paragraph: {
-            class: Paragraph,
-
-            inlineToolbar: true,
-          },
-
-          list: {
-            class: List,
-
-            inlineToolbar: true,
-          },
-
-          embed: {
-            class: Embed,
-
-            inlineToolbar: false,
-
-            config: {
-              services: {
-                youtube: true,
-
-                coub: true,
-
-                codepen: true,
-
-                instagram: true,
-
-                twitter: true,
-
-                github: true,
-
-                reddit: true,
-
-                twitch: true,
-
-                vimeo: true,
-              },
-            },
-          },
-
-          code: CodeTool,
-
-          table: Table,
-
-          quote: Quote,
-
-          delimiter: Delimiter,
-
-          checklist: Checklist,
-
-          warning: Warning,
-
-          raw: Raw,
-
-          Marker: Marker,
-
-          carousel: {
-  class: Carousel,
-
-  config: {
-    uploader: {
-      async uploadByFile(
-        file: File
-      ) {
-        const fileExt =
-          file.name
-            .split(".")
-            .pop();
-
-        const fileName = `carousel/${Date.now()}-${Math.random()
-          .toString(36)
-          .substring(2)}.${fileExt}`;
-
-        const { error } =
-          await supabase.storage
-            .from("media")
-            .upload(
-              fileName,
-              file
-            );
-
-        if (error) {
-          console.log(error);
-
-          throw new Error(
-            error.message
-          );
-        }
-
-        uploadedFilesRef.current.push(
-          fileName
-        );
-
-        const { data } =
-          supabase.storage
-            .from("media")
-            .getPublicUrl(
-              fileName
-            );
-
-        return {
-          success: 1,
-
-          file: {
-            url: data.publicUrl,
-          },
-        };
-      },
-    },
-  },
-},
-
-          mermaid: {
-            class: MermaidTool,
-          },
-
-          image: {
-            class: ImageTool,
-
-            config: {
-              uploader: {
-                async uploadByFile(
-                  file: File
-                ) {
-                  const fileExt =
-                    file.name
-                      .split(".")
-                      .pop();
-
-                  const fileName = `uploads/${Date.now()}.${fileExt}`;
-
-                  const { error } =
-                    await supabase.storage
-                      .from("media")
-                      .upload(
-                        fileName,
-                        file
-                      );
-
-                  if (error) {
-                    console.log(error);
-
-                    throw new Error(
-                      error.message
-                    );
-                  }
-
-                  uploadedFilesRef.current.push(
-                    fileName
-                  );
-
-                  setHasUnsavedChanges(
-                    true
-                  );
-
-                  const { data } =
-                    supabase.storage
-                      .from("media")
-                      .getPublicUrl(
-                        fileName
-                      );
-
-                  return {
-                    success: 1,
-
-                    file: {
-                      url: data.publicUrl,
-                    },
-                  };
-                },
-              },
-            },
-          },
-
-          video: {
-            class: VideoTool,
-
-            config: {
-              onUpload: (
-                fileName: string
-              ) => {
-                uploadedFilesRef.current.push(
-                  fileName
-                );
-              },
-            },
-          },
-
-          audio: {
-            class: AudioTool,
-
-            config: {
-              onUpload: (
-                fileName: string
-              ) => {
-                uploadedFilesRef.current.push(
-                  fileName
-                );
-              },
-            },
-          },
-        },
-      });
-
-      editorRef.current = editor;
     }
   };
 
@@ -638,10 +307,13 @@ export default function NewPostPage() {
         </div>
 
         <div className="rounded-3xl border border-zinc-800 bg-zinc-900 p-6">
-          <div
-            id="editorjs"
-            className="min-h-[300px]"
-          />
+          <Editor
+  editorRef={editorRef}
+  uploadedFilesRef={uploadedFilesRef}
+  onChange={() => {
+    setHasUnsavedChanges(true);
+  }}
+/>
         </div>
 
         <div className="mt-8 flex justify-end">
