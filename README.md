@@ -1,156 +1,135 @@
 # Custom CMS Platform
 
-A modern full-stack CMS platform built using:
+A modern, full-stack content management system built with **Next.js 16**, **Supabase**, and **Editor.js** — split into two independent apps: an admin dashboard for content creation, and a public-facing blog viewer.
 
-- Next.js App Router
-- TypeScript
-- Supabase
-- Editor.js
-- Tailwind CSS
-
-This repository contains:
-
-- `admin-cms` → Admin dashboard/editor
-- `user-cms` → Public frontend/blog viewer
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?logo=supabase)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwind-css)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## Admin Dashboard
+## Table of Contents
 
+- [Overview](#overview)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Repository Structure](#repository-structure)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Set Up Supabase](#2-set-up-supabase)
+  - [3. Configure Environment Variables](#3-configure-environment-variables)
+  - [4. Install & Run](#4-install--run)
+- [Database Setup](#database-setup)
+- [Storage Setup](#storage-setup)
+- [Deployment](#deployment)
+- [Author](#author)
+- [License](#license)
+
+---
+
+## Overview
+
+This repository contains two Next.js applications that share the same Supabase backend:
+
+| App | Description | Default Port |
+|---|---|---|
+| `admin-cms` | Password-protected dashboard for creating, editing, and deleting posts | `http://localhost:3000` |
+| `user-cms` | Public blog with search, category filtering, and rich content rendering | `http://localhost:3001` |
+
+---
+
+## Screenshots
+
+### Admin Dashboard
 <div align="center">
-  <img src="img/AdminDashboard.png" alt="AdminDashboard"/>
+  <img src="img/AdminDashboard.png" alt="Admin Dashboard" width="800"/>
+</div>
+
+### Post Editor
+<div align="center">
+  <img src="img/CreatePage.png" alt="Create Page" width="800"/>
+</div>
+
+### Public Blog Home
+<div align="center">
+  <img src="img/UserHome.png" alt="User CMS Home" width="800"/>
+</div>
+
+### Blog Post Page
+<div align="center">
+  <img src="img/BlogPage.png" alt="Blog Page" width="800"/>
 </div>
 
 ---
 
-## Create Page
+## Features
 
-<div align="center">
-  <img src="img/CreatePage.png" alt="CreatePage"/>
-</div>
-
----
-
-## User CMS Home
-
-<div align="center">
-  <img src="img/UserHome.png" alt="UserHome"/>
-</div>
-
----
-
-## Blog Page
-
-<div align="center">
-  <img src="img/BlogPage.png" alt="BlogPage"/>
-</div>
-
----
-
-# Features
-
-## Admin CMS
-
-- Authentication
-- Create posts
-- Edit posts
-- Delete posts
-- Dashboard search
+### Admin CMS
+- Supabase email/password authentication
+- Create, edit, and delete posts
+- Dashboard with live search
 - Category & subcategory system
-- Unsaved changes protection
-- Media cleanup on discard
-- Responsive UI
+- Auto-generated URL slugs
+- Unsaved changes protection (prevents accidental navigation away)
+- Automatic media cleanup when a post is discarded
 - Dark mode editor
+- Fully responsive UI
 
----
+### Editor.js — Supported Block Types
+Rich text, Headers (H1–H6), Paragraphs, Lists (ordered & unordered), Checklists, Tables, Code blocks, Quotes, Warnings, Delimiters, Raw HTML, Embeds, Image uploads, Audio uploads, Video uploads, Carousel / gallery, Mermaid diagrams, LaTeX / KaTeX math, Custom blocks
 
-## Editor.js Features
-
-- Rich text editing
-- Headers
-- Lists
-- Code blocks
-- Tables
-- Quotes
-- Checklists
-- Warnings
-- Raw HTML
-- Embeds
-- Delimiters
-- Image uploads
-- Audio uploads
-- Video uploads
-- Carousel/gallery
-- Mermaid diagrams
-- LaTeX/KaTeX rendering
-- Custom blocks
-
----
-
-## User CMS
-
-- Home page
-- Dynamic blog pages
-- Search dropdown
-- Category filtering
-- Subcategory filtering
-- Latest-first posts
+### User CMS (Public Blog)
+- Home page with latest-first post listing
+- Dynamic blog post pages via slug routing
+- Live search dropdown
+- Category and subcategory filtering
+- Full rendering of all Editor.js block types (carousels, media, Mermaid, KaTeX)
 - Responsive design
-- Carousel rendering
-- Media rendering
-- Mermaid rendering
-- KaTeX rendering
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-## Frontend
-
-- Next.js 15
-- React
-- TypeScript
-- Tailwind CSS
-
----
-
-## Backend
-
-- Supabase Database
-- Supabase Auth
-- Supabase Storage
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS v4 |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth |
+| Storage | Supabase Storage |
+| Editor | Editor.js + plugins |
+| Diagrams | Mermaid |
+| Math | KaTeX |
 
 ---
 
-## Editor
+## Repository Structure
 
-- Editor.js
-- Mermaid
-- KaTeX
-
----
-
-# Repository Structure
-
-```txt
+```
 custom-cms/
-
 ├── admin-cms/
 │   ├── app/
-│   ├── components/
-│   ├── lib/
-│   ├── public/
-│   ├── types/
-│   └── ...
-
+│   │   ├── api/posts/        # REST API routes (GET, POST, PUT, DELETE)
+│   │   ├── api/upload/       # Media upload handler
+│   │   ├── dashboard/        # Post listing & management
+│   │   └── editor/           # New post & edit post pages
+│   ├── components/           # Editor, LoginForm, Navbar, PostCard, media tools
+│   ├── lib/                  # Supabase client & Editor.js config
+│   ├── types/                # Shared TypeScript types (Post, EditorContent)
+│   └── .env.example
 ├── user-cms/
 │   ├── app/
-│   ├── components/
-│   ├── lib/
-│   ├── public/
-│   ├── types/
-│   └── ...
-
+│   │   ├── [slug]/           # Dynamic blog post page
+│   │   └── page.tsx          # Home page
+│   ├── components/           # Navbar, PostCard, RenderBlocks, SearchDropdown
+│   ├── lib/                  # Supabase client
+│   ├── types/                # Shared TypeScript types
+│   └── .env.example
 ├── README.md
 ├── LICENSE
 └── .gitignore
@@ -158,216 +137,171 @@ custom-cms/
 
 ---
 
-# Environment Setup
+## Prerequisites
 
-Create a Supabase project:
+Before you begin, make sure you have the following installed:
 
-https://supabase.com
-
----
-
-# Admin CMS Environment
-
-Create:
-
-```txt
-admin-cms/.env.local
-```
-
-Add:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
-```
+- **Node.js** v18 or later
+- **npm** v9 or later (or yarn/pnpm)
+- A free [Supabase](https://supabase.com) account
 
 ---
 
-# User CMS Environment
+## Quick Start
 
-Create:
-
-```txt
-user-cms/.env.local
-```
-
-Add:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
-
----
-
-# Database Setup
-
-Inside Supabase SQL Editor run:
-
-```sql
-create table posts (
-  id uuid default gen_random_uuid() primary key,
-
-  title text not null,
-
-  slug text unique not null,
-
-  category text,
-
-  subcategory text,
-
-  thumbnail_url text,
-
-  content jsonb,
-
-  created_at timestamptz default now()
-);
-```
-
----
-
-# Storage Bucket Setup
-
-Go to:
-
-```txt
-Storage
-```
-
-Create bucket:
-
-```txt
-media
-```
-
-Enable:
-
-```txt
-Public Bucket
-```
-
----
-
-# Storage Policies
-
-## Public Read Access
-
-Operation:
-
-```txt
-SELECT
-```
-
-Expression:
-
-```sql
-true
-```
-
----
-
-## Authenticated Upload
-
-Operation:
-
-```txt
-INSERT
-```
-
-Expression:
-
-```sql
-auth.role() = 'authenticated'
-```
-
----
-
-## Authenticated Delete
-
-Operation:
-
-```txt
-DELETE
-```
-
-Expression:
-
-```sql
-auth.role() = 'authenticated'
-```
-
----
-
-## Authenticated Update
-
-Operation:
-
-```txt
-UPDATE
-```
-
-Expression:
-
-```sql
-auth.role() = 'authenticated'
-```
-
----
-
-# Installation
-
-Clone repository:
+### 1. Clone the Repository
 
 ```bash
-git clone YOUR_REPOSITORY_URL
+git clone https://github.com/rituraj-mandi/custom-cms.git
+cd custom-cms
 ```
 
----
+### 2. Set Up Supabase
 
-# Install Admin CMS
+1. Go to [supabase.com](https://supabase.com) and create a new project.
+2. Once the project is ready, navigate to **Project Settings → API**.
+3. Copy your **Project URL** and **anon public key** — you'll need them in the next step.
+4. Run the [database setup](#database-setup) SQL and configure [storage](#storage-setup) as described below.
 
+### 3. Configure Environment Variables
+
+Create `.env.local` files for both apps by copying the examples:
+
+```bash
+cp admin-cms/.env.example admin-cms/.env.local
+cp user-cms/.env.example user-cms/.env.local
+```
+
+Then open each file and fill in your Supabase credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+### 4. Install & Run
+
+Both apps run simultaneously. Open **two terminals**:
+
+**Terminal 1 — Admin CMS** (runs on `http://localhost:3000`)
 ```bash
 cd admin-cms
 npm install
-```
-
-Run:
-
-```bash
 npm run dev
 ```
 
----
-
-# Install User CMS
-
-Open another terminal:
-
+**Terminal 2 — User CMS** (runs on `http://localhost:3001`)
 ```bash
 cd user-cms
 npm install
-```
-
-Run:
-
-```bash
-npm run dev
+npm run dev -- --port 3001
 ```
 
 ---
 
-# License
+## Database Setup
 
-MIT
+In your Supabase project, open the **SQL Editor** and run the following:
+
+```sql
+create table posts (
+  id           uuid        default gen_random_uuid() primary key,
+  title        text        not null,
+  slug         text        unique not null,
+  category     text,
+  subcategory  text,
+  thumbnail_url text,
+  content      jsonb,
+  created_at   timestamptz default now()
+);
+```
+
+### Row Level Security (RLS) Policies
+ 
+After creating the table, enable RLS and add the following policies so that the public blog can read posts freely while only authenticated admins can write.
+ 
+**Enable RLS on the posts table:**
+ 
+```sql
+alter table posts enable row level security;
+```
+ 
+**Then add these four policies:**
+ 
+| Policy | Operation | Who | Expression |
+|---|---|---|---|
+| Public read | `SELECT` | Anyone | `true` |
+| Authenticated insert | `INSERT` | Authenticated users | `auth.role() = 'authenticated'` |
+| Authenticated update | `UPDATE` | Authenticated users | `auth.role() = 'authenticated'` |
+| Authenticated delete | `DELETE` | Authenticated users | `auth.role() = 'authenticated'` |
+ 
+Or run all four at once in the SQL Editor:
+ 
+```sql
+-- Allow anyone to read posts (used by user-cms)
+create policy "Public read posts"
+  on "public"."posts"
+  as PERMISSIVE
+  for SELECT
+  to public
+  using (true);
+ 
+-- Allow authenticated admins to create posts
+create policy "Authenticated insert posts"
+  on "public"."posts"
+  as PERMISSIVE
+  for INSERT
+  to authenticated
+  with check (true);
+ 
+-- Allow authenticated admins to update posts
+create policy "Authenticated update posts"
+  on "public"."posts"
+  as PERMISSIVE
+  for UPDATE
+  to authenticated
+  using (true);
+ 
+-- Allow authenticated admins to delete posts
+create policy "Authenticated delete posts"
+  on "public"."posts"
+  as PERMISSIVE
+  for DELETE
+  to authenticated
+  using (true);
+```
+ 
+> **Why this matters:** Without RLS enabled, the `posts` table is open to anyone with your anon key. These policies ensure your public blog can read posts while only a signed-in admin can create, edit, or delete them.
+ 
+---
+
+## Storage Setup
+
+### 1. Create the bucket
+
+1. In your Supabase project, go to **Storage**.
+2. Click **New bucket**, name it `media`, and enable **Public bucket**.
+
+### 2. Set access policies
+
+Navigate to **Storage → Policies** and add the following four policies for the `media` bucket:
+
+| Policy | Operation | Expression |
+|---|---|---|
+| Public read | `SELECT` | `true` |
+| Authenticated upload | `INSERT` | `auth.role() = 'authenticated'` |
+| Authenticated update | `UPDATE` | `auth.role() = 'authenticated'` |
+| Authenticated delete | `DELETE` | `auth.role() = 'authenticated'` |
 
 ---
 
-# Author
+## Author
 
-Rituraj Mandi
+**Rituraj Mandi**  
+GitHub: [github.com/rituraj-mandi](https://github.com/rituraj-mandi)
 
-GitHub:
-https://github.com/rituraj-mandi
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
