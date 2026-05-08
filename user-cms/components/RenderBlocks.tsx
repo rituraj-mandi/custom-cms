@@ -380,6 +380,28 @@ export default function RenderBlocks({
                 />
               );
 
+            case "carousel":
+  return (
+    <div
+      key={index}
+      className="flex snap-x gap-4 overflow-x-auto pb-4"
+    >
+      {(block.data || []).map(
+        (
+          image: any,
+          i: number
+        ) => (
+          <img
+            key={i}
+            src={image.url}
+            alt=""
+            className="h-[250px] min-w-[49%] snap-center rounded-3xl bg-zinc-900 object-contain"
+          />
+        )
+      )}
+    </div>
+  );
+
             case "flipbox":
               return (
                 <div

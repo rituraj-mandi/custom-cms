@@ -275,8 +275,60 @@ export default function NewPostPage() {
           Marker: Marker,
 
           carousel: {
-            class: Carousel,
+  class: Carousel,
+
+  config: {
+    uploader: {
+      async uploadByFile(
+        file: File
+      ) {
+        const fileExt =
+          file.name
+            .split(".")
+            .pop();
+
+        const fileName = `carousel/${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2)}.${fileExt}`;
+
+        const { error } =
+          await supabase.storage
+            .from("media")
+            .upload(
+              fileName,
+              file
+            );
+
+        if (error) {
+          console.log(error);
+
+          throw new Error(
+            error.message
+          );
+        }
+
+        uploadedFilesRef.current.push(
+          fileName
+        );
+
+        const { data } =
+          supabase.storage
+            .from("media")
+            .getPublicUrl(
+              fileName
+            );
+
+        return {
+          success: 1,
+
+          file: {
+            url: data.publicUrl,
           },
+        };
+      },
+    },
+  },
+},
 
           mermaid: {
             class: MermaidTool,
