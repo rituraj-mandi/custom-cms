@@ -15,45 +15,35 @@ This repository contains:
 
 ---
 
-# Screenshots
-
 ## Admin Dashboard
 
-Add screenshot here:
-
-```txt
-/public/screenshots/admin-dashboard.png
-```
+<div align="center">
+  <img src="img/AdminDashboard.png" alt="AdminDashboard"/>
+</div>
 
 ---
 
-## Editor Page
+## Create Page
 
-Add screenshot here:
-
-```txt
-/public/screenshots/editor-page.png
-```
+<div align="center">
+  <img src="img/CreatePage.png" alt="CreatePage"/>
+</div>
 
 ---
 
 ## User CMS Home
 
-Add screenshot here:
-
-```txt
-/public/screenshots/user-home.png
-```
+<div align="center">
+  <img src="img/UserHome.png" alt="UserHome"/>
+</div>
 
 ---
 
 ## Blog Page
 
-Add screenshot here:
-
-```txt
-/public/screenshots/blog-page.png
-```
+<div align="center">
+  <img src="img/BlogPage.png" alt="BlogPage"/>
+</div>
 
 ---
 
