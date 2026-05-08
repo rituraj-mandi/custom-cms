@@ -25,7 +25,6 @@ A modern, full-stack content management system built with **Next.js 16**, **Supa
   - [4. Install & Run](#4-install--run)
 - [Database Setup](#database-setup)
 - [Storage Setup](#storage-setup)
-- [Deployment](#deployment)
 - [Author](#author)
 - [License](#license)
 
@@ -144,6 +143,57 @@ Before you begin, make sure you have the following installed:
 - **Node.js** v18 or later
 - **npm** v9 or later (or yarn/pnpm)
 - A free [Supabase](https://supabase.com) account
+
+### Editor.js Plugins
+ 
+The admin editor depends on the following Editor.js packages. They are included in `admin-cms/package.json` and will be installed automatically via `npm install`, but you can also install them manually:
+ 
+```bash
+npm install \
+  @editorjs/editorjs \
+  @editorjs/header \
+  @editorjs/paragraph \
+  @editorjs/list \
+  @editorjs/checklist \
+  @editorjs/quote \
+  @editorjs/warning \
+  @editorjs/code \
+  @editorjs/raw \
+  @editorjs/table \
+  @editorjs/delimiter \
+  @editorjs/embed \
+  @editorjs/image \
+  @editorjs/simple-image \
+  @editorjs/marker \
+  editorjs-carousel \
+  editorjs-math \
+  editorjs-mermaid \
+  mermaid \
+  katex
+```
+ 
+| Package | Purpose |
+|---|---|
+| `@editorjs/editorjs` | Core Editor.js engine |
+| `@editorjs/header` | H1–H6 heading blocks |
+| `@editorjs/paragraph` | Default text block |
+| `@editorjs/list` | Ordered & unordered lists |
+| `@editorjs/checklist` | Interactive checklists |
+| `@editorjs/quote` | Pull quote blocks |
+| `@editorjs/warning` | Warning/callout blocks |
+| `@editorjs/code` | Syntax-highlighted code blocks |
+| `@editorjs/raw` | Raw HTML blocks |
+| `@editorjs/table` | Table blocks |
+| `@editorjs/delimiter` | Section dividers |
+| `@editorjs/embed` | oEmbed / iframe embeds |
+| `@editorjs/image` | Image upload blocks |
+| `@editorjs/simple-image` | Image via URL (no upload) |
+| `@editorjs/marker` | Text highlight/marker |
+| `editorjs-carousel` | Image carousel / gallery |
+| `editorjs-math` | LaTeX math input via KaTeX |
+| `editorjs-mermaid` | Mermaid diagram blocks |
+| `mermaid` | Mermaid diagram renderer |
+| `katex` | KaTeX math renderer |
 
 ---
 
