@@ -1,6 +1,14 @@
 "use client";
 
-import Editor from "@/components/Editor";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(
+  () => import("@/components/Editor"),
+  {
+    ssr: false,
+  }
+);
+
 import { useEffect, useRef, useState } from "react";
 import {
   useRouter,
@@ -45,7 +53,7 @@ export default function EditPostPage() {
     useState(false);
 
   const [editorContent, setEditorContent] =
-  useState<any>(null);
+    useState<any>(null);
 
   const [
     hasUnsavedChanges,
@@ -53,17 +61,46 @@ export default function EditPostPage() {
   ] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     checkUser();
 
-    fetchPost();
+    const loadPost = async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+      if (cancelled) return;
+
+      if (error || !data) {
+        alert("Post not found");
+
+        router.push("/dashboard");
+
+        return;
+      }
+
+      setPostId(data.id);
+
+      setTitle(data.title);
+
+      setCategory(data.category);
+
+      setSubcategory(data.subcategory);
+
+      setEditorContent(data.content);
+
+      setLoading(false);
+    };
+
+    loadPost();
 
     return () => {
-      editorRef.current?.destroy();
-
-      editorRef.current = null;
+      cancelled = true;
     };
   }, []);
-
 
   useEffect(() => {
     const handleBeforeUnload = (
@@ -113,34 +150,6 @@ export default function EditPostPage() {
     if (!user) {
       router.push("/");
     }
-  };
-
-  const fetchPost = async () => {
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("slug", slug)
-      .single();
-
-    if (error || !data) {
-      alert("Post not found");
-
-      router.push("/dashboard");
-
-      return;
-    }
-
-    setPostId(data.id);
-
-    setTitle(data.title);
-
-    setCategory(data.category);
-
-    setSubcategory(data.subcategory);
-
-    setEditorContent(data.content);
-
-    setLoading(false);
   };
 
   const handleUpdatePost =
@@ -364,14 +373,17 @@ export default function EditPostPage() {
         </div>
 
         <div className="rounded-3xl border border-zinc-800 bg-zinc-900 p-6">
-          <Editor
-  initialData={editorContent}
-  editorRef={editorRef}
-  uploadedFilesRef={uploadedFilesRef}
-  onChange={() => {
-    setHasUnsavedChanges(true);
-  }}
-/>
+          {editorContent !== null && (
+            <Editor
+              key={postId}
+              data={editorContent}
+              editorRef={editorRef}
+              uploadedFilesRef={uploadedFilesRef}
+              onChange={() => {
+                setHasUnsavedChanges(true);
+              }}
+            />
+          )}
         </div>
 
         <div className="mt-8 flex justify-end">

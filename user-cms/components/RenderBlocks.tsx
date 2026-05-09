@@ -6,7 +6,7 @@ import mermaid from "mermaid";
 
 import katex from "katex";
 
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 import { useEffect } from "react";
 

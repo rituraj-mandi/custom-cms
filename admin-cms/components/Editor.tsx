@@ -40,18 +40,28 @@ export default function Editor({
     initEditor();
 
     return () => {
-      editorRef.current?.destroy();
+      if (
+        editorRef.current &&
+        typeof editorRef.current.destroy ===
+          "function"
+      ) {
+        editorRef.current.destroy();
 
-      editorRef.current = null;
+        editorRef.current = null;
+      }
     };
   }, []);
 
   const initEditor = async () => {
+    if (!holderRef.current) return;
+
     if (
-      !holderRef.current ||
-      editorRef.current
-    )
+      editorRef.current &&
+      typeof editorRef.current.destroy ===
+        "function"
+    ) {
       return;
+    }
 
     const EditorJS = (
       await import("@editorjs/editorjs")
@@ -110,24 +120,21 @@ export default function Editor({
     ).default;
 
     const Carousel = (
-      await import(
-        "editorjs-carousel"
-      )
+      await import("editorjs-carousel")
     ).default;
 
     const MermaidTool = (
-      await import(
-        "editorjs-mermaid"
-      )
+      await import("editorjs-mermaid")
     ).default;
+
+    if (!holderRef.current) return;
 
     const editor = new EditorJS({
       holder: holderRef.current,
 
       data:
         data &&
-        typeof data ===
-          "object" &&
+        typeof data === "object" &&
         Array.isArray(data.blocks)
           ? {
               time:
@@ -361,6 +368,20 @@ export default function Editor({
     });
 
     editorRef.current = editor;
+
+    try {
+      await editor.isReady;
+    } catch {
+      return;
+    }
+
+    if (!holderRef.current) {
+      editor.destroy();
+
+      editorRef.current = null;
+
+      return;
+    }
   };
 
   return (
