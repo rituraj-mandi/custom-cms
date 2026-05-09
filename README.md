@@ -261,6 +261,18 @@ npm install
 npm run dev -- --port 3001
 ```
 
+### 5. Replace content of next.config.ts in admin-cms
+
+```bash
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: false,
+};
+
+export default nextConfig;
+```
+
 ---
 
 ## Database Setup
