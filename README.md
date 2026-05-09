@@ -43,35 +43,39 @@ This repository contains two Next.js applications that share the same Supabase b
 
 ## Screenshots
 
-### Admin Dashboard
-<div align="center">
+### Admin CMS
 
-<div>
-  <h3>Admin Dashboard</h3>
-  <img src="img/AdminDashboard.png" alt="Admin Dashboard" width="48%"/>
-</div>
+<table>
+<tr>
+<td align="center">
+<b>Admin Dashboard</b><br><br>
+<img src="img/AdminDashboard.png" width="100%">
+</td>
 
-<div>
-  <h3>Create Post</h3>
-  <img src="img/CreatePage.png" alt="Post Editor" width="48%"/>
-</div>
+<td align="center">
+<b>Create Post</b><br><br>
+<img src="img/CreatePage.png" width="100%">
+</td>
+</tr>
+</table>
 
-</div>
+---
 
 ### Public Dashboard
-<div align="center">
 
-<div>
-  <h3>Public Blog Home</h3>
-  <img src="img/UserHome.png" alt="User CMS Home" width="48%"/>
-</div>
+<table>
+<tr>
+<td align="center">
+<b>Public Blog Home</b><br><br>
+<img src="img/UserHome.png" width="100%">
+</td>
 
-<div>
-  <h3>Blog Post Page</h3>
-  <img src="img/BlogPage.png" alt="Blog Page" width="48%"/>
-</div>
-
-</div>
+<td align="center">
+<b>Blog Post Page</b><br><br>
+<img src="img/BlogPage.png" width="100%">
+</td>
+</tr>
+</table>
 
 ---
 
